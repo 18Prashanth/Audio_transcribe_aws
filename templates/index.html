@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../static/styles.css" />
+    <title>Transcription App</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>🎙️ Transcription Hub</h1>
+        <p>Upload files or record live audio for instant transcription</p>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('upload')">
+          📁 File Upload
+        </button>
+        <button class="tab" onclick="switchTab('live')">
+          🎤 Live Recording
+        </button>
+      </div>
+
+      <!-- File Upload Tab -->
+      <div id="upload-tab" class="tab-content active">
+        <div class="upload-zone" id="uploadZone">
+          <div class="upload-icon">📁</div>
+          <h3>Drop your audio or video files here</h3>
+          <p>Supports MP3, WAV, MP4, MOV, AVI and more</p>
+          <input
+            type="file"
+            id="fileInput"
+            class="file-input"
+            accept="audio/*,video/*"
+            multiple
+          />
+          <button
+            class="upload-btn"
+            onclick="document.getElementById('fileInput').click()"
+          >
+            Choose Files
+          </button>
+        </div>
+
+        <div
+          class="progress-container"
+          id="uploadProgress"
+          style="display: none"
+        >
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <div class="status hidden" id="uploadStatus"></div>
+      </div>
+
+      <!-- Live Recording Tab -->
+      <div id="live-tab" class="tab-content">
+        <div class="recording-controls">
+          <button class="record-btn" id="recordBtn" onclick="toggleRecording()">
+            🎤 Start Recording
+          </button>
+          <p style="margin-top: 15px; color: #666">
+            Click to start recording and see live transcription
+          </p>
+        </div>
+
+        <div class="audio-visualizer" id="audioVisualizer"></div>
+
+        <div class="status hidden" id="recordingStatus"></div>
+      </div>
+
+      <!-- Chat Interface (Common for both tabs) -->
+      <div class="chat-container">
+        <div class="chat-messages" id="chatMessages">
+          <div class="message system">
+            <div>
+              Welcome! Upload a file or start recording to begin transcription.
+            </div>
+            <div class="timestamp" id="welcomeTime"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../static/app.js"></script>
+  </body>
+</html>
