@@ -13,15 +13,6 @@
         <p>Upload files or record live audio for instant transcription</p>
       </div>
 
-      <div class="tabs">
-        <button class="tab active" onclick="switchTab('upload')">
-          📁 File Upload
-        </button>
-        <button class="tab" onclick="switchTab('live')">
-          🎤 Live Recording
-        </button>
-      </div>
-
       <!-- File Upload Tab -->
       <div id="upload-tab" class="tab-content active">
         <div class="upload-zone" id="uploadZone">
@@ -52,22 +43,6 @@
         </div>
 
         <div class="status hidden" id="uploadStatus"></div>
-      </div>
-
-      <!-- Live Recording Tab -->
-      <div id="live-tab" class="tab-content">
-        <div class="recording-controls">
-          <button class="record-btn" id="recordBtn" onclick="toggleRecording()">
-            🎤 Start Recording
-          </button>
-          <p style="margin-top: 15px; color: #666">
-            Click to start recording and see live transcription
-          </p>
-        </div>
-
-        <div class="audio-visualizer" id="audioVisualizer"></div>
-
-        <div class="status hidden" id="recordingStatus"></div>
       </div>
 
       <!-- Chat Interface (Common for both tabs) -->

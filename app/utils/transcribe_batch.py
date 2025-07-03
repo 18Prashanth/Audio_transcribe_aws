@@ -30,13 +30,17 @@ def upload_file(file: UploadFile = File(...)):
         raise HTTPException(status_code=500, detail=f"Upload failed: {e}")
 
 
-def start_transcription_job(job_name: str, s3_uri: str, language_code='en-US', media_format='mp3', output_bucket=OUTPUT_BUCKET):
+def start_transcription_job(job_name: str, s3_uri: str, language_code='en-US', media_format='mp3', output_bucket=OUTPUT_BUCKET,max_speakers=2):
     transcribe_client.start_transcription_job(
         TranscriptionJobName=job_name,
         LanguageCode=language_code,
         MediaFormat=media_format,
         Media={'MediaFileUri': s3_uri},
-        OutputBucketName=output_bucket  # Optional: You can set where transcript JSON will be stored
+        OutputBucketName=output_bucket,
+        Settings={
+            'ShowSpeakerLabels': True,
+            'MaxSpeakerLabels': max_speakers
+        }
     )
 
     # Poll job status until it completes or fails
@@ -44,30 +48,40 @@ def start_transcription_job(job_name: str, s3_uri: str, language_code='en-US', m
         status = transcribe_client.get_transcription_job(TranscriptionJobName=job_name)
         job_status = status['TranscriptionJob']['TranscriptionJobStatus']
 
-        if job_status in ['COMPLETED', 'FAILED']:
+        if job_status == "COMPLETED":
+            uri = status["TranscriptionJob"]["Transcript"]["TranscriptFileUri"]
             break
-        print("Waiting for transcription to complete...")
-        time.sleep(5)
+        elif job_status == "FAILED":
+            raise Exception("Transcription job failed.")
+        else:
+            print("Waiting for transcription to complete...")
+            time.sleep(5)
 
-    if job_status == 'COMPLETED':
-        transcript_uri = status['TranscriptionJob']['Transcript']['TranscriptFileUri']
-        return transcript_uri
-    else:
-        return None
+    return uri
+
     
+
+from urllib.parse import urlparse, unquote
 
 def get_transcript_text(transcript_url):
     parsed_url = urlparse(transcript_url)
+    path = parsed_url.path.lstrip('/')
 
-    # Example: for virtual-hosted style
-    # parsed_url.netloc = 'audiooutput0.s3.amazonaws.com'
-    # parsed_url.path = '/transcription-xxxx.json'
+    # If host looks like s3.amazonaws.com (path-style URL)
+    if parsed_url.netloc in ['s3.amazonaws.com', 's3.us-east-1.amazonaws.com']:  # add other regions if needed
+        # path-style URL: /bucket/key
+        parts = path.split('/', 1)
+        if len(parts) == 2:
+            bucket_name, object_key = parts[0], parts[1]
+        else:
+            raise ValueError("Invalid S3 path-style URL format.")
+    else:
+        # virtual-hosted-style URL: bucket.s3.amazonaws.com
+        bucket_name = parsed_url.netloc.split('.')[0]
+        object_key = path
 
-    # Extract bucket name from hostname (before .s3.amazonaws.com)
-    bucket_name =  parsed_url.path.split('/')[1] 
-
-    # Remove leading slash from path to get the object key
-    object_key = '/'.join(parsed_url.path.split('/')[2:])
+    # If key contains URL encoded characters, decode them
+    object_key = unquote(object_key)
 
     s3_client = boto3.client('s3')
 
@@ -80,5 +94,8 @@ def get_transcript_text(transcript_url):
     response = requests.get(presigned_url)
     response.raise_for_status()
     data = response.json()
+
     return data['results']['transcripts'][0]['transcript']
+
+
 

@@ -4,9 +4,10 @@ import uuid
 from ..utils.transcribe_batch import start_transcription_job
 from ..utils.transcribe_batch import get_transcript_text
 from ..utils.transcribe_batch import upload_file
-
-
-
+from fastapi import BackgroundTasks
+from fastapi.responses import JSONResponse
+import asyncio
+from concurrent.futures import ThreadPoolExecutor
 
 
 router = APIRouter()
@@ -14,18 +15,23 @@ router = APIRouter()
 
 @router.post("/transcribe/")
 async def upload_and_transcribe(file: UploadFile = File(...)):
-    file_extension = file.filename.split('.')[-1]
-    s3 = upload_file(file)
+    loop = asyncio.get_running_loop()
+    executor = ThreadPoolExecutor()
+    
+    # Run blocking upload_file in thread
+    s3 = await loop.run_in_executor(executor, upload_file, file)
 
     s3_uri = s3.get("url")
 
-    # Start transcription
     job_name = f"transcription-{uuid.uuid4()}"
-    transcript_uri = start_transcription_job(job_name, s3_uri, media_format=file_extension)
+
+    # Run blocking start_transcription_job in thread
+    transcript_uri = await loop.run_in_executor(executor, start_transcription_job, job_name, s3_uri,"en-US", file.filename.split('.')[-1])
 
     if transcript_uri:
-        transcript_text = get_transcript_text(transcript_uri)
-        return {"transcript": transcript_text}
+        # Run get_transcript_text in thread too
+        transcript_text = await loop.run_in_executor(executor, get_transcript_text, transcript_uri)
+        return JSONResponse(content={"transcript": transcript_text})
     else:
         return {"error": "Transcription failed"}
 
