@@ -1,4 +1,6 @@
-🎙️ Audio Transcription Web Application
+### 🎙️ Audio Transcription Web Application
+
+---
 
 A full-stack web app for uploading and transcribing audio with speaker diarization, powered by AWS Transcribe & FastAPI 🚀
 
@@ -24,9 +26,11 @@ A full-stack web app for uploading and transcribing audio with speaker diarizati
 
 - 📬 Contact
 
-👁️ Overview
+---
 
-## This app lets users upload audio 🎧 files, then asynchronously transcribes it with speaker labels 🗣️, using AWS Transcribe and FastAPI backend.
+### 👁️ Overview
+
+This app lets users upload audio 🎧 files, then asynchronously transcribes it with speaker labels 🗣️, using AWS Transcribe and FastAPI backend.
 
 ✨ Features
 
@@ -40,7 +44,7 @@ A full-stack web app for uploading and transcribing audio with speaker diarizati
 
 ## ☁️ AWS S3 for audio storage and transcription results
 
-🏗️ Architecture
+### 🏗️ Architecture
 
 ```
 User (Browser)
@@ -57,7 +61,7 @@ Frontend
    ⇩ Displays transcript with speakers & timestamps in chat UI
 ```
 
-🛠️ Tech Stack
+### 🛠️ Tech Stack
 
 | Layer             | Technology              |
 | ----------------- | ----------------------- |
@@ -67,7 +71,7 @@ Frontend
 | 🎙️ Speech-to-Text | AWS Transcribe          |
 | 🚀 Deployment     | Local / Cloud           |
 
-⚙️ Setup and Installation
+### ⚙️ Setup and Installation
 
 ## Prerequisites
 
