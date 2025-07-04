@@ -89,7 +89,7 @@ Frontend
 
 ## Steps
 
-# 1. Clone repo
+### 1. Clone repo
 
 ```
 git clone https://github.com/18Prashanth/Audio_transcribe_aws.git
@@ -97,20 +97,20 @@ cd Audio_transcribe_aws
 
 ```
 
-# 2. Create virtual env & activate
+### 2. Create virtual env & activate
 
 ```
 python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
 ```
 
-# 3. Install Python deps
+### 3. Install Python deps
 
 ```
 pip install -r requirements.txt
 ```
 
-# 4. Configure AWS
+### 4. Configure AWS
 
 note: To configure aws required aws screte and access key
 
@@ -118,18 +118,18 @@ note: To configure aws required aws screte and access key
 aws configure
 ```
 
-# 5. Create s3 buckets and update configs
+### 5. Create s3 buckets and update configs
 
 - Modify S3 bucket names and AWS region in backend code
 - Two s3 buckets required one for store input audio and one more for store output
 
-# 6. Run backend
+### 6. Run backend
 
 ```
 uvicorn app.main:app --reload
 ```
 
-# 7. Serve frontend
+### 7. Serve frontend
 
 ```
 http://localhost:8000
