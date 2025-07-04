@@ -1,8 +1,8 @@
 ## 🎙️ Audio Transcription Web Application
 
----
-
 A full-stack web app for uploading and transcribing audio with speaker diarization, powered by AWS Transcribe & FastAPI 🚀
+
+---
 
 ## 📑 Table of Contents
 
