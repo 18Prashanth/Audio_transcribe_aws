@@ -173,6 +173,8 @@ http://localhost:8000
 
 ```
 
+---
+
 ### ❓ Troubleshooting & FAQ
 
 ### Q: Transcription job failed or stuck?
