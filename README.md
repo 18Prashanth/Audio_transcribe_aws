@@ -193,5 +193,6 @@ http://localhost:8000
 
 ### 📬 Contact
 
-Prashanth — prashanthgowdaas@outlook.com
+Prashanth gowda — prashanthgowdaas@outlook.com
+
 GitHub: https://github.com/18Prashanth
